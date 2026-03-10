@@ -1,0 +1,37 @@
+ANEXO: Detalhamento Técnico e Justificativa da Stack de Observabilidade
+Projeto: Modernização da Sustentação e Governança Operacional (Projeto Yggdrasil)
+
+1. Objetivo Estratégico
+Implementar uma "Torre de Controle Inteligente" para as APIs e automações da Cooperativa. O foco é a transição do modelo reativo (descobrir o erro quando o associado reclama) para o modelo preditivo (o sistema avisa e identifica a causa antes do impacto na ponta).
+
+2. O Salto de Eficiência: De 30 Minutos para 1 Minuto
+Hoje, a identificação de um erro é um processo manual e "no escuro". Com a nova stack, transformamos horas de busca em segundos de resposta:
+
+Atividade	Como é hoje (Manual)	Com a Nova Stack (Automático)
+Identificação da Falha	Vigilância humana a cada 5 min ou reclamação da agência.	Instantâneo. O sistema detecta a falha em milissegundos e envia um alerta.
+Busca pela Causa (Log)	O técnico precisa "caçar" arquivos no OneDrive ou acessar servidores Linux.	Centralizado. O erro exato aparece em uma tela única, com um clique.
+Tempo de Diagnóstico	10 a 30 minutos por incidente.	Menos de 1 minuto.
+3. Por que estas tecnologias? (Visão para Gestão)
+Para facilitar o entendimento, imagine que nossa operação digital é uma frota de veículos. Abaixo explicamos o papel de cada ferramenta:
+
+Docker (A Garagem Inteligente):
+O que faz: Organiza nossas aplicações em "caixas" padronizadas.
+Valor: Garante que o sistema funcione em qualquer lugar sem erros de compatibilidade, facilitando manutenções rápidas.
+RabbitMQ (O Motor de Entrega - Foco em Assinaturas):
+O que faz: É o mensageiro que leva os documentos para assinatura.
+Valor: Garante que nenhuma assinatura se perca. Se o sistema de destino estiver lento, o RabbitMQ "guarda" o documento com segurança e entrega assim que possível, sem que o associado precise refazer o processo.
+Prometheus & Grafana (O Painel de Controle e Alertas):
+O que faz: Coleta os "batimentos cardíacos" dos sistemas e mostra em gráficos.
+Valor: Mostra em tempo real se a operação está saudável. Se um processo novo for lançado, saberemos na hora se ele está "rodando liso" ou se está gerando erros ocultos que podem estressar a agência amanhã.
+Loki & Grafana Alloy (O Investigador Digital):
+O que faz: Centraliza e organiza todos os registros (logs) automaticamente.
+Valor: Resolve o problema de "caçar logs" no OneDrive ou no Linux. O sistema aponta exatamente "onde dói", permitindo que o técnico atue na causa raiz e não apenas em paliativos.
+4. Problemas que Resolvemos Imediatamente
+Fim da "Falha Silenciosa": Acaba com o risco de um robô parar às 16h e a TI só descobrir no dia seguinte.
+Inteligência Pós-Lançamento: Ao lançar um novo produto no Fluid, teremos um dashboard (painel) que diz exatamente como o sistema está se comportando.
+Gestão Baseada em Dados: Gera relatórios para a gerência sobre quais processos são mais estáveis e quais precisam de melhoria, transformando "achismos" técnicos em decisões estratégicas.
+5. Segurança e Soberania
+Operação 100% Local: Tudo roda "dentro de casa", atrás do nosso Firewall. Nenhuma informação de associado ou dado operacional sai da Cooperativa.
+Padrão Institucional: Esta é a mesma tecnologia utilizada pelo CAS (Centro de Atendimento Sicredi), garantindo que estamos seguindo o que há de mais moderno e seguro no sistema.
+6. Conclusão
+A aprovação desta stack não é apenas uma melhoria técnica, é uma blindagem operacional. O objetivo é garantir que, se algo falhar, o sistema reaja, avise e permita a correção em menos de 1 minuto, tornando o erro invisível para o nosso cooperado.

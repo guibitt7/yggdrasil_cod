@@ -1,0 +1,13 @@
+automacoes:
+
+  - nome: robo_contratacao_credito
+    sla_max_minutes: 30
+    responsavel: time_financeiro
+
+  - nome: robo_extracao_nfe
+    sla_max_minutes: 10
+    responsavel: time_fiscal
+
+  - nome: robo_relatorio_diario
+    sla_max_minutes: 5
+    responsavel: time_operacoes

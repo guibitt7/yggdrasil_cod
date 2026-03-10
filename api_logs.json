@@ -1,0 +1,37 @@
+[{
+  "timestamp": "2026-03-05T14:30:05.123456+00:00",
+  "level": "INFO",
+  "app": "minha-api",
+  "version": "1.2.3",
+  "trace_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "SUCCESS",
+  "message": "GET /users → 200",
+  "method": "GET",
+  "path": "/users",
+  "status_code": 200,
+  "duration_ms": 37,
+  "client_ip": "203.0.113.10",
+  "db_queries_count": 3,
+  "db_failed_count": 0
+},
+
+
+
+{
+  "timestamp": "2026-03-05T14:31:10.987654+00:00",
+  "level": "CRITICAL",
+  "app": "minha-api",
+  "version": "1.2.3",
+  "trace_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "FAILED",
+  "message": "POST /payments → 500",
+  "method": "POST",
+  "path": "/payments",
+  "status_code": 500,
+  "duration_ms": 142,
+  "client_ip": "203.0.113.10",
+  "db_queries_count": 1,
+  "db_failed_count": 0,
+  "exception": "ValueError",
+  "stacktrace": "Traceback (most recent call last):\n  ...\nValueError: ...\n"
+}]
