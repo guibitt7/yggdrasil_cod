@@ -45,3 +45,76 @@ prometheus.remote_write "to_prometheus" {
     url = "http://ygg-prometheus:9090/api/v1/write"
   }
 }
+
+
+
+// 1. Descoberta dos arquivos de log
+local.file_match "rpa_logs" {
+    // Busca todos os logs na pasta, filtrando pelo sufixo .log
+    // O Alloy monitora novos arquivos que aparecerem com a data de hoje automaticamente
+    path_targets = [
+        { "__path__" = "C:/Users/*/Documents/Automation/coop-0703/yggdrasil/logs/*.log" },
+    ]
+}
+
+// 2. Leitura e extração do Hostname pelo nome do arquivo
+loki.source.file "rpa_log_files" {
+    targets    = local.file_match.rpa_logs.targets
+    forward_to = [loki.process.parse_rpa_json.receiver]
+}
+
+// 3. Processamento do JSON e Extração de Labels
+loki.process "parse_rpa_json" {
+    forward_to = [loki.write.yggdrasil_loki.receiver]
+
+    // Extrai o hostname direto do nome do arquivo (__path__)
+    // Ex: .../logs/HOSTNAME_2026_04_28.log -> extrai HOSTNAME
+    stage.regex {
+        source = "__path__"
+        expression = ".*/(?P<extracted_hostname>[^/]+)_\\d{4}_\\d{2}_\\d{2}\\.log"
+    }
+
+    // Faz o parse do JSON
+    stage.json {
+        expressions = {
+            ts         = "timestamp",
+            level      = "level",
+            automacao  = "automacao",
+            robot      = "robot",
+            status     = "status",
+            msg        = "massage",
+            trace_id   = "trace_id",
+            execURI    = "exec_id",
+        }
+    }
+
+    // Define o timestamp com base no que está dentro do arquivo (histórico)
+    stage.timestamp {
+        source = "ts"
+        format = "RFC3339" // Ajuste aqui se o seu formato for diferente (ex: DD/MM/YYYY)
+    }
+
+    // Transforma campos importantes em LABELS (filtros rápidos)
+    stage.labels {
+        values = {
+            hostname  = "extracted_hostname",
+            level     = "level",
+            automacao = "automacao",
+            robot     = "robot",
+            status    = "status",
+        }
+    }
+
+    // Limpa a linha de log no Grafana para não repetir o JSON inteiro se não quiser
+    stage.line_format {
+        template = "[{{.level}}] [{{.status}}] {{.msg}}"
+    }
+}
+
+// 4. Envio para o seu servidor central (Yggdrasil)
+loki.write "yggdrasil_loki" {
+    endpoint {
+        url = "http://IP_DO_SEU_SERVIDOR:3100/loki/api/v1/push"
+        // Se colocar autenticação no futuro, adiciona aqui
+    }
+}
